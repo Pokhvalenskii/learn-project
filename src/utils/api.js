@@ -4,12 +4,23 @@ class Api {
   }
 
   getPost(page) {
-    return fetch(`${this._URL}/posts/?_limit=5&_page=${page}`)
+    return fetch(`${this._URL}/posts/?_limit=5&_page=${page}`, {
+      method: 'GET',
+    })
+      .then((res) => {
+        return res.json();
+      })
+        .then((res) => {
+          return res;
+        })
+          .catch((err) => {
+            return Promise.reject(`ERROR: ${err.status}`)
+          });
   }
 }
 
 const api = new Api({
-  urlApi: 'https://jsonplaceholder.typicode.com'
+  URL: 'https://jsonplaceholder.typicode.com'
 })
 
 export default api;
