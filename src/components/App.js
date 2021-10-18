@@ -1,17 +1,14 @@
 import { useEffect, useState } from "react";
 import api from "../utils/api";
 import { useSelector, useDispatch } from 'react-redux';
-import { PAGE_NUMBER } from '../redux/page/actions'
-
+import { PAGE_NUMBER } from '../redux/page/actions';
+import { ADD_MORE_POSTS } from '../redux/Posts/actions'
 
 function App() {
 
   const item = useSelector((state) => state.page)
+  const posts = useSelector((state) => state.posts)
   const dispatch = useDispatch()
-  // const [page, setPage] = useState(item.page);
-  // const [posts, setPosts] = useState({});
-
-  console.log('ITEM: ', item)
 
   useEffect(() => {
     initPosts(item.page);    
@@ -25,6 +22,12 @@ function App() {
     return api.getPost(page)
       .then(res => {
         console.log('GETPOST: ', res)
+        res.forEach(element => {
+          dispatch({
+            type: ADD_MORE_POSTS,
+            payload: element
+          })
+        });        
       })
   }
 
