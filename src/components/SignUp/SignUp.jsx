@@ -61,6 +61,7 @@ function SignUp(props) {
         }}
       >
         <TextField
+          error
           label='Name'
           sx={{mb: 1}}
           variant="outlined" 
@@ -69,6 +70,7 @@ function SignUp(props) {
           {...register('name', {required: true, minLength:3, maxLength:30})}
         />
         <TextField
+          error
           label='Email'
           sx={{mb: 1}}
           variant="outlined"   
@@ -77,6 +79,7 @@ function SignUp(props) {
           {...register('email', {required: true, pattern: regEmail})}
         />
         <TextField
+          error
           label='Password'
           sx={{mb: 1}}
           variant="outlined"  
@@ -85,6 +88,7 @@ function SignUp(props) {
           {...register('password', {required: true, minLength:3, maxLength:30})}
         />
         <TextField
+          error
           label='Confirm password'
           sx={{mb: 1}}
           variant="outlined"  

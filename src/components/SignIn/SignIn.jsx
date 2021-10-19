@@ -1,5 +1,6 @@
 // import { useSelector, useDispatch } from 'react-redux';
 // import  * as types from '../../redux/signIn/actions'
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Box } from '@mui/system';
 import { Button, Typography, Link } from '@mui/material';
@@ -7,16 +8,24 @@ import TextField from '@mui/material/TextField'
 import { Link as RouterLink, useHistory } from 'react-router-dom'
 
 
-function SignIn(props) {
+function SignIn(props) {  
 
   const history = useHistory();
   const regEmail = /[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/
 
+  const [userEmail, setUserEmail] = useState('');
+  const [userPassword, setUserPassword] = useState('');
+  
+
   const { 
     register, 
-    handleSubmit
-
+    handleSubmit,
+    formState: {
+      errors
+    }
   } = useForm({mode: 'onChange'});
+
+  console.log('errors: ',errors.email)
   
   const onSubmit = data => {
     props.handleSignIn({
@@ -25,9 +34,7 @@ function SignIn(props) {
     })
       .then(() => {
         history.push('/')
-        // console.log('Отправлено: ', data)
-      })
-    
+      })    
   }
 
   return (
@@ -64,18 +71,26 @@ function SignIn(props) {
         }}
       >
         <TextField
+          error={}
           type='email'
           variant='outlined'
           sx={{mb: 1}}
           label='Email'
-          {...register('email', {required: true, pattern: regEmail})} 
+          {...register('email', {required: true, pattern: regEmail})}
+          // inputRef={register({
+          //   required: 'email is required'
+          // })} 
+          helperText='textHelper'
+          // onChange={handleChangeEmail}
         />
         <TextField 
+          // error={}
           type="password" 
           {...register('password', {required: true, minLength:3, maxLength:30})}
           label='Password'
           variant='outlined'
-          sx={{mb: 1}} 
+          sx={{mb: 1}}
+          // onChange={handleChangePassword}
         />
         <Button 
           type='submit'
