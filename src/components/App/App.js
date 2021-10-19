@@ -11,6 +11,7 @@ import { Box } from '@mui/system';
 import SignIn from '../SignIn/SignIn';
 import SignUp from '../SignUp/SignUp';
 import auth from "../../utils/auth";
+import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
 
 
 function App() {
@@ -61,8 +62,14 @@ function App() {
   }
 
   return (
-    <Switch>
-      <Route exact path='/'>
+    <Switch>      
+      <Route path='/signup'>
+        <SignUp handleSignUp={handleSignUp}/>
+      </Route>
+      <Route path='/signin'>
+        <SignIn handleSignIn={handleSignIn}/>
+      </Route>
+      <ProtectedRoute path='/' loggedIn={storage.loggedIn.loggedIn}>
         <Box
           component='section'
           sx={{
@@ -94,13 +101,7 @@ function App() {
           АВТОРИЗОВАН
           </Typography>}
         </Box>
-      </Route>
-      <Route path='/signup'>
-        <SignUp handleSignUp={handleSignUp}/>
-      </Route>
-      <Route path='/signin'>
-        <SignIn handleSignIn={handleSignIn}/>
-      </Route>
+      </ProtectedRoute>
     </Switch>    
   );
 }

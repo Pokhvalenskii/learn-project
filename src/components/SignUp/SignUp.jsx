@@ -1,5 +1,3 @@
-// import { useSelector, useDispatch } from 'react-redux';
-// import  * as types from '../../redux/signUp/actions'
 import { useForm } from 'react-hook-form';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField'
@@ -27,7 +25,6 @@ function SignUp(props) {
       .then(() => {
         history.push('/signin')
       })
-    // console.log('Отправлено: ', data)
   }
 
   return (
