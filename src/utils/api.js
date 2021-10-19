@@ -17,6 +17,7 @@ class Api {
             return Promise.reject(`ERROR: ${err.status}`)
           });
   }
+  
 }
 
 const api = new Api({
