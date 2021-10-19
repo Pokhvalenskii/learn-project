@@ -25,7 +25,7 @@ function SignIn(props) {
     })
       .then(() => {
         history.push('/')
-        console.log('Отправлено: ', data)
+        // console.log('Отправлено: ', data)
       })
     
   }
