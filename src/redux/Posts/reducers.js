@@ -1,13 +1,11 @@
 import { ADD_MORE_POSTS } from "./actions";
 
-const defaultState = {};
+const defaultState = [];
 
 export const posts = (state = defaultState, action) => {
   switch (action.type) {
     case ADD_MORE_POSTS:
-      console.log('ACTION: ', action.payload);
-      console.log(state);
-      return {...state, new: action.payload};
+      return [...state, action.payload];
     default: return state;
   }
 }

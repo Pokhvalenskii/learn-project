@@ -4,7 +4,7 @@ class Api {
   }
 
   getPost(page) {
-    return fetch(`${this._URL}/posts/?_limit=5&_page=${page}`, {
+    return fetch(`${this._URL}/posts/?_limit=3&_page=${page}`, {
       method: 'GET',
     })
       .then((res) => {
