@@ -40,7 +40,7 @@ function SignIn(props) {
       .then(() => {
         history.push('/')
       })
-        .catch(setLoggin(true))
+        .catch(() => {setLoggin(true)})
   }
 
   return (

@@ -57,7 +57,7 @@ function SignUp(props) {
       .then(() => {
         history.push('/signin')
       })
-        .catch(setLoggin(true))
+        .catch(() => {setLoggin(true)})
   }
 
   return (

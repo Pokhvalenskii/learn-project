@@ -16,6 +16,8 @@ import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
 
 function App() {
   // debugger;
+
+  const [pages, setPages] = useState({})
   const item = useSelector((state) => state.page);
   const storage = useSelector((state) => state)
   const dispatch = useDispatch();
@@ -27,7 +29,13 @@ function App() {
   function initPosts(page) {
     return api.getPost(page)
       .then(res => {
-        res.forEach(element => {
+        setPages({
+          page: res.page,
+          per_page: res.per_page,
+          total: res.total,
+          total_pages: res.total_pages
+        })
+        res.data.forEach(element => {
           dispatch({
             type: ADD_MORE_POSTS,
             payload: element
@@ -74,18 +82,7 @@ function App() {
             flexDirection: 'column'
           }}
         >
-        <AntdTable />
-        <Button
-            onClick={morePosts}
-            type='submit'
-            variant='contained'
-            sx={{
-              mt: 4,
-              height: 56,            
-            }}
-          >
-            More...
-          </Button>
+        <AntdTable pages={pages} morePosts={morePosts}/>
           {storage.loggedIn.loggedIn && 
           <Typography 
             component='p'
@@ -95,10 +92,9 @@ function App() {
               mb: 2
             }}
           >
-          АВТОРИЗОВАН
           </Typography>}
         </Box>
-      </ProtectedRoute>
+      </ProtectedRoute> 
     </Switch>    
   );
 }
