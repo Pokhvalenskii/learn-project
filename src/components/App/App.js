@@ -16,8 +16,6 @@ import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
 
 function App() {
   // debugger;
-  const [loggedIn, setLoggedIn] = useState(false);
-
   const item = useSelector((state) => state.page);
   const storage = useSelector((state) => state)
   const dispatch = useDispatch();
@@ -52,7 +50,6 @@ function App() {
   function handleSignIn(data) {
     return auth.signin(data)
       .then((res) => {
-        setLoggedIn(true);
         dispatch({
           type: LOGGED_IN,
           payload: true

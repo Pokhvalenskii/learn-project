@@ -3,19 +3,23 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Box } from '@mui/system';
-import { Button, Typography, Link } from '@mui/material';
+import { Button, Typography, Link, Alert} from '@mui/material';
 import TextField from '@mui/material/TextField'
 import { Link as RouterLink, useHistory } from 'react-router-dom'
-
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from "yup";
 
 function SignIn(props) {  
 
   const history = useHistory();
   const regEmail = /[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/
+  const regPass = /^([^0-9]*)$/
+  const [loggin, setLoggin] = useState(false)
 
-  const [userEmail, setUserEmail] = useState('');
-  const [userPassword, setUserPassword] = useState('');
-  
+  const schema = yup.object().shape({
+    email: yup.string().email('Введите корректный email').required('Обязательное поле'),
+    password: yup.string().min(6, 'Пароль должен содержать от 6 до 30 букв').max(30, 'Пароль должен содержать от 6 до 30 букв').matches(regPass, 'Пароль должен содержать от 6 до 30 букв').required('Обязательное поле')
+  })
 
   const { 
     register, 
@@ -23,10 +27,11 @@ function SignIn(props) {
     formState: {
       errors
     }
-  } = useForm({mode: 'onChange'});
+  } = useForm({
+    mode: 'onChange',
+    resolver: yupResolver(schema)
+  });
 
-  console.log('errors: ',errors.email)
-  
   const onSubmit = data => {
     props.handleSignIn({
       email: data.email,
@@ -34,7 +39,8 @@ function SignIn(props) {
     })
       .then(() => {
         history.push('/')
-      })    
+      })
+        .catch(setLoggin(true))
   }
 
   return (
@@ -71,27 +77,30 @@ function SignIn(props) {
         }}
       >
         <TextField
-          error={}
           type='email'
           variant='outlined'
           sx={{mb: 1}}
           label='Email'
-          {...register('email', {required: true, pattern: regEmail})}
-          // inputRef={register({
-          //   required: 'email is required'
-          // })} 
-          helperText='textHelper'
-          // onChange={handleChangeEmail}
+          // ref={register}
+          {...register('email')} // {required: true, pattern: regEmail}
+          error={!!errors.email}
+          helperText={errors?.email?.message}
         />
-        <TextField 
-          // error={}
+        <TextField          
           type="password" 
-          {...register('password', {required: true, minLength:3, maxLength:30})}
+          // ref={register}
+          {...register('password')} // {required: true, minLength:3, maxLength:30}
           label='Password'
           variant='outlined'
           sx={{mb: 1}}
-          // onChange={handleChangePassword}
+          error={!!errors.password}
+          helperText={errors?.password?.message}
         />
+        {loggin &&
+        <Alert severity="error">
+          <strong>Неправильный логин или пароль</strong>
+        </Alert>
+        }
         <Button 
           type='submit'
           variant='contained'
