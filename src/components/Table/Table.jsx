@@ -1,17 +1,30 @@
 import { Table as AntdTable, Pagination} from 'antd';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { PAGE_NUMBER } from '../../redux/page/actions';
+
 
 function Table (props) {
   const {
-    // page,
-    // per_page,
-    // total,
+    page,
+    per_page,
+    total,
     // total_pages,
-    morePosts
-  } = props
-  const posts = useSelector((state) => state.posts)
-  
-  const columns = [
+    // morePosts,
+    data
+  } = props.pages
+  // const posts = useSelector((state) => state.posts.data)
+  const dispatch = useDispatch();
+
+  let newData = [];
+  if (data) {
+    // console.log('ACCET')
+    newData = data.reduce((accumulator, post) => {
+    post.key = `${post.id}`
+    return [...accumulator, post]
+    }, []);
+  }
+
+  const newColumns = [
     {
       title: 'id',
       dataIndex: 'id',
@@ -33,16 +46,19 @@ function Table (props) {
       key: 'last_name'
     }
   ];
-  
-  let dataSource = posts.reduce((accumulator, post) => {
-    post.key = `${post.id}`
-    return [...accumulator, post]
-  }, []);
 
   return (<>
-    <AntdTable dataSource={dataSource} columns={columns} pagination={{
-      defaultPageSize: 3,
-      onChange: morePosts,
+    <AntdTable dataSource={newData} columns={newColumns} pagination={{
+      defaultCurrent: page,
+      defaultPageSize: per_page,
+      total: total,
+      onChange: (page) => {
+        // console.log('page', page)
+        dispatch({
+          type: PAGE_NUMBER,
+          payload: page
+        })  
+      }
     }}/>
   </>)
 }

@@ -37,10 +37,16 @@ function SignIn(props) {
       email: data.email,
       password: data.password,
     })
-      .then(() => {
-        history.push('/')
+      .then((res) => {
+        if(res === 400) {
+          setLoggin(true)
+          // console.log('ERROR')          
+        }
+        if(res === 200) {
+          // console.log('LOGIN')
+          history.push('/')
+        }        
       })
-        .catch(() => {setLoggin(true)})
   }
 
   return (
@@ -123,6 +129,15 @@ function SignIn(props) {
       >
         Sign Up
       </Link>
+      <Typography 
+        component='p'
+        align='center'
+        sx={{
+          mb: 2
+        }}
+      >
+        login: eve.holt@reqres.in        
+      </Typography>
     </Box>
   )
 }

@@ -3,22 +3,8 @@ class Api {
     this._URL = data.URL
   }
 
-  // getPost(page) {
-  //   return fetch(`${this._URL}/posts/?_limit=3&_page=${page}`, {
-  //     method: 'GET',
-  //   })
-  //     .then((res) => {
-  //       return res.json();
-  //     })
-  //       .then((res) => {
-  //         return res;
-  //       })
-  //         .catch((err) => {
-  //           return Promise.reject(`ERROR: ${err.status}`)
-  //         });
-  // }
-  getPost(page) {
-    return fetch(`${this._URL}users?page=${page}`, {
+  getPages(page) {
+    return fetch(`${this._URL}users?page=${page}&per_page=3`, {
       method: 'GET',
     })
       .then((res) => {
@@ -27,6 +13,47 @@ class Api {
         .then((res) => {
           return res;
         })
+          .catch((err) => {
+            return Promise.reject(`ERROR: ${err.status}`)
+          });
+  }
+
+  signup(data) {
+    return fetch(`${this._URL}register`, {
+      method: 'POST',
+      headers: {
+        'Content-type': 'application/json'
+      },
+      body: JSON.stringify({
+        'email': data.email,
+        'password': data.password
+      })
+    })
+      .then((res) => {
+        return res.json();
+      })
+        .then((res) => {
+          return res
+        })
+          .catch((err) => {
+            return Promise.reject(`ERROR: ${err.status}`)
+          });
+  }
+
+  signin(data) {
+    return fetch(`${this._URL}login`, {
+      method: 'POST',
+      headers: {
+        'Content-type': 'application/json'
+      },
+      body: JSON.stringify({
+        'email': data.email,
+        'password': data.password
+      })
+    })
+      .then((res) => {
+        return res;
+      })
           .catch((err) => {
             return Promise.reject(`ERROR: ${err.status}`)
           });

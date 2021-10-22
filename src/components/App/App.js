@@ -23,46 +23,39 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    initPosts(item.page)
+    initPages(item.page)
   }, [item.page]);
 
-  function initPosts(page) {
-    return api.getPost(page)
+  function initPages(page) {
+    return api.getPages(page)
       .then(res => {
+        // console.log('INIT PAGES', res)
         setPages({
           page: res.page,
           per_page: res.per_page,
           total: res.total,
-          total_pages: res.total_pages
-        })
-        res.data.forEach(element => {
-          dispatch({
-            type: ADD_MORE_POSTS,
-            payload: element
-          })
-        });        
+          total_pages: res.total_pages,
+          data: res.data
+        })     
       })
-  }
-
-  function morePosts() {
-    dispatch({
-      type: PAGE_NUMBER,
-      payload: item.page + 1
-    })
-  }
+  }  
 
   function handleSignUp(data) {
-    return auth.signup(data)
+    return api.signup(data)
   }
   
   function handleSignIn(data) {
-    return auth.signin(data)
+    return api.signin(data)
       .then((res) => {
-        dispatch({
-          type: LOGGED_IN,
-          payload: true
-        });
-        localStorage.setItem('jwt', res.token);
+        // console.log('resapp', res)
+        if(res.status === 200){
+          dispatch({
+            type: LOGGED_IN,
+            payload: true
+          });
+          localStorage.setItem('jwt', res.token);
+        }
+        return res.status;
       })
   }
 
@@ -82,7 +75,7 @@ function App() {
             flexDirection: 'column'
           }}
         >
-        <AntdTable pages={pages} morePosts={morePosts}/>
+        <AntdTable pages={pages}/>
           {storage.loggedIn.loggedIn && 
           <Typography 
             component='p'
