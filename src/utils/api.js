@@ -30,14 +30,11 @@ class Api {
       })
     })
       .then((res) => {
-        return res.json();
+        return res
       })
-        .then((res) => {
-          return res
-        })
-          .catch((err) => {
-            return Promise.reject(`ERROR: ${err.status}`)
-          });
+        .catch((err) => {
+          return Promise.reject(`ERROR: ${err.status}`)
+        });
   }
 
   signin(data) {

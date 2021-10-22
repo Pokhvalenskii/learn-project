@@ -35,17 +35,20 @@ function SignUp(props) {
   });
 
   function onSubmit(data) {
-    console.log('onSubmit')
+    // console.log('onSubmit')
     props.handleSignUp({
       email: data.email,
       password: data.password,
     })
-      .then((res) => {
-        if(!res.error) {
-          history.push('/signin')
-        }        
-      })
-        .catch(() => {setLoggin(true)})
+    .then((res) => {
+      // console.log('RESSTATUS', res)
+      if(res === 400) {
+        setLoggin(true)
+      }
+      if(res === 200) {
+        history.push('/signin')
+      }        
+    })
   }
 
   return (
@@ -103,7 +106,7 @@ function SignUp(props) {
         />
         {loggin &&
         <Alert severity="error">
-          <strong>Этот Email уже используется</strong>
+          <strong>Можно зарегистрировать только определенный email</strong>
         </Alert>
         }
         <Button

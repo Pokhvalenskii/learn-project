@@ -42,6 +42,10 @@ function App() {
 
   function handleSignUp(data) {
     return api.signup(data)
+      .then((res) => {
+        // console.log('RES1', res)
+        return res.status;
+      })
   }
   
   function handleSignIn(data) {
