@@ -8,7 +8,9 @@ import { Link as RouterLink, useHistory} from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 
-function SignUp(props) {
+import api from "../../utils/api";
+
+function SignUp() {
 
   const history = useHistory();
   const [loggin, setLoggin] = useState(false);
@@ -36,7 +38,7 @@ function SignUp(props) {
 
   function onSubmit(data) {
     // console.log('onSubmit')
-    props.handleSignUp({
+    handleSignUp({
       email: data.email,
       password: data.password,
     })
@@ -49,6 +51,14 @@ function SignUp(props) {
         history.push('/signin')
       }        
     })
+  }
+
+  function handleSignUp(data) {
+    return api.signup(data)
+      .then((res) => {
+        // console.log('RES1', res)
+        return res.status;
+      })
   }
 
   return (
@@ -144,4 +154,4 @@ function SignUp(props) {
   )
 }
 
-export default SignUp
+export { SignUp }

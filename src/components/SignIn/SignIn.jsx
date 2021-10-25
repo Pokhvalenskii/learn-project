@@ -1,5 +1,3 @@
-// import { useSelector, useDispatch } from 'react-redux';
-// import  * as types from '../../redux/signIn/actions'
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Box } from '@mui/system';
@@ -9,10 +7,20 @@ import { Link as RouterLink, useHistory } from 'react-router-dom'
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 
-function SignIn(props) {  
+import api from "../../utils/api";
+
+import { useDispatch } from 'react-redux';
+import { LOGGED_IN } from '../../redux/loggedIn/actions'
+
+
+
+
+function SignIn() {  
 
   const history = useHistory();
-  const regEmail = /[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/
+  const dispatch = useDispatch();
+
+  
   const regPass = /^([^0-9]*)$/
   const [loggin, setLoggin] = useState(false)
 
@@ -33,19 +41,34 @@ function SignIn(props) {
   });
 
   const onSubmit = data => {
-    props.handleSignIn({
+    handleSignIn({
       email: data.email,
       password: data.password,
     })
       .then((res) => {
         if(res === 400) {
           setLoggin(true)
-          // console.log('ERROR')          
+          // console.log('ERROR')
         }
         if(res === 200) {
           // console.log('LOGIN')
           history.push('/')
-        }        
+        }
+      })
+  }
+
+  function handleSignIn(data) {
+    return api.signin(data)
+      .then((res) => {
+        // console.log('resapp', res)
+        if(res.status === 200){
+          dispatch({
+            type: LOGGED_IN,
+            payload: true
+          });
+          localStorage.setItem('jwt', res.token);
+        }
+        return res.status;
       })
   }
 
@@ -142,4 +165,4 @@ function SignIn(props) {
   )
 }
 
-export default SignIn
+export { SignIn }

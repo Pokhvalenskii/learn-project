@@ -1,19 +1,19 @@
-import { Table as AntdTable, Pagination} from 'antd';
+import { Table as AntdTable } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
 import { PAGE_NUMBER } from '../../redux/page/actions';
+import { useEffect, useState } from "react";
+import api from "../../utils/api";
 
-
-function Table (props) {
+function Table () {  
+  const dispatch = useDispatch();
+  const [pages, setPages] = useState({})
   const {
     page,
     per_page,
     total,
-    // total_pages,
-    // morePosts,
     data
-  } = props.pages
-  // const posts = useSelector((state) => state.posts.data)
-  const dispatch = useDispatch();
+  } = pages
+  const item = useSelector((state) => state.page);
 
   let newData = [];
   if (data) {
@@ -47,6 +47,24 @@ function Table (props) {
     }
   ];
 
+  useEffect(() => {
+    initPages(item.page)
+  }, [item.page]);
+
+  function initPages(page) {
+    return api.getPages(page)
+      .then(res => {
+        // console.log('INIT PAGES', res)
+        setPages({
+          page: res.page,
+          per_page: res.per_page,
+          total: res.total,
+          total_pages: res.total_pages,
+          data: res.data
+        })     
+      })
+  }
+
   return (<>
     <AntdTable dataSource={newData} columns={newColumns} pagination={{
       defaultCurrent: page,
@@ -63,4 +81,4 @@ function Table (props) {
   </>)
 }
 
-export default Table;
+export { Table };
