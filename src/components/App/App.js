@@ -12,8 +12,8 @@ function App() {
 
   return (
     <>
-      {!storage.loggedIn.loggedIn ? <PublicRoute /> : <PrivateRoute />}
-      {/* <PrivateRoute /> */}
+      {/* {!storage.loggedIn.loggedIn ? <PublicRoute /> : <PrivateRoute />} */}
+      <PrivateRoute />
     </>
   );
 }

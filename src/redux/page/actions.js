@@ -9,11 +9,14 @@ const initData = data => ({
   payload: data
 })
 
-export const initialPages = (page) => {
-  return dispatch => {
-    return api.getPages(page)
-      .then(res => {
-        dispatch(initData(res))
-      })
-  }
-}
+// export const initialPages = (page) => {
+//   return dispatch => {
+//     return api.getPages(page)
+//       .then(res => {
+//         dispatch(initData(res))
+//       })
+//   }
+// }
+
+export const initialPages = page => dispatch =>
+  api.getPages(page).then(res => dispatch(initData(res)))
