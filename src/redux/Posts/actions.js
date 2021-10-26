@@ -1,1 +1,0 @@
-export const ADD_MORE_POSTS = 'ADD_MORE_POSTS';

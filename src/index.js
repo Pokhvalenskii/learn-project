@@ -1,17 +1,20 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
 import './index.css';
 import 'antd/dist/antd.css'
+
+import React from 'react';
+import ReactDOM from 'react-dom';
 import App from './components/App/App';
-import { createStore, applyMiddleware, compose } from 'redux';
-import { Provider, browserHistory } from 'react-redux';
+import { createStore, applyMiddleware} from 'redux';
+import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
-import { Router } from 'react-router'
 import { rootReducer } from './redux/reducers';
-import { syncHistoryWithStore } from 'react-router-redux'
+import { composeWithDevTools } from 'redux-devtools-extension';
+import thunk from 'redux-thunk'
+
+
 // import createLogger from 'redux-logger';
 
-const store = createStore(rootReducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
+const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(thunk))); //window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 
 ReactDOM.render(
   <React.StrictMode>

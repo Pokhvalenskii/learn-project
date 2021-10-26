@@ -2,6 +2,7 @@ import { useSelector } from 'react-redux';
 
 import { PublicRoute } from '../PublicRoute/PublicRoute'
 import { PrivateRoute } from "../PrivateRoute/PrivateRoute";
+import { composeWithDevTools } from 'redux-devtools-extension';
 
 
 function App() {
@@ -12,6 +13,7 @@ function App() {
   return (
     <>
       {!storage.loggedIn.loggedIn ? <PublicRoute /> : <PrivateRoute />}
+      {/* <PrivateRoute /> */}
     </>
   );
 }

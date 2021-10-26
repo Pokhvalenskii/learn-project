@@ -1,27 +1,20 @@
 import { Table as AntdTable } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
 import { PAGE_NUMBER } from '../../redux/page/actions';
-import { useEffect, useState } from "react";
-import api from "../../utils/api";
+import { useEffect } from "react";
+import { initialPages } from '../../redux/page/actions';
 
 function Table () {  
   const dispatch = useDispatch();
-  const [pages, setPages] = useState({})
-  const {
-    page,
-    per_page,
-    total,
-    data
-  } = pages
   const item = useSelector((state) => state.page);
+  const pageData = useSelector((state) => state.data);
 
   let newData = [];
-  if (data) {
-    // console.log('ACCET')
-    newData = data.reduce((accumulator, post) => {
-    post.key = `${post.id}`
-    return [...accumulator, post]
-    }, []);
+    if (pageData.data) {
+      newData = pageData.data.reduce((accumulator, post) => {
+        post.key = `${post.id}`
+        return [...accumulator, post]
+        }, []);
   }
 
   const newColumns = [
@@ -48,37 +41,25 @@ function Table () {
   ];
 
   useEffect(() => {
-    initPages(item.page)
+    dispatch(initialPages(item.page));
   }, [item.page]);
 
-  function initPages(page) {
-    return api.getPages(page)
-      .then(res => {
-        // console.log('INIT PAGES', res)
-        setPages({
-          page: res.page,
-          per_page: res.per_page,
-          total: res.total,
-          total_pages: res.total_pages,
-          data: res.data
-        })     
-      })
-  }
-
-  return (<>
-    <AntdTable dataSource={newData} columns={newColumns} pagination={{
-      defaultCurrent: page,
-      defaultPageSize: per_page,
-      total: total,
-      onChange: (page) => {
-        // console.log('page', page)
-        dispatch({
-          type: PAGE_NUMBER,
-          payload: page
-        })  
-      }
-    }}/>
-  </>)
+  return (
+    <>
+      <AntdTable dataSource={newData} columns={newColumns} pagination={{
+        defaultCurrent: pageData.page,
+        defaultPageSize: pageData.per_page,
+        total: pageData.total,
+        onChange: (page) => {
+          dispatch({
+            type: PAGE_NUMBER,
+            payload: page
+          })  
+        }
+      }}
+      />
+    </>
+  )
 }
 
 export { Table };
