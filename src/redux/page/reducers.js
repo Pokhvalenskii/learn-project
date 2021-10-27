@@ -9,7 +9,6 @@ const defaultData = {}
 export const page = (state = dafaultState, action) => {
   switch(action.type) {
     case PAGE_NUMBER:
-      console.log('PAGE_NUMBER', action.payload)
       return { ...state, page: action.payload}
     default: 
       return state;
@@ -19,7 +18,6 @@ export const page = (state = dafaultState, action) => {
 export const data = (state = defaultData, action) => {
   switch(action.type) {
     case INIT_DATA:
-      console.log('INIT_DATA', action.payload)
       return { 
         ...state,
         data: action.payload.data,

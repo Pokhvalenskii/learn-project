@@ -1,22 +1,11 @@
 import { Table as AntdTable } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
-import { PAGE_NUMBER } from '../../redux/page/actions';
+import { pageNumber } from '../../redux/page/actions';
 import { useEffect } from "react";
 import { initialPages } from '../../redux/page/actions';
 
-function Table () {  
-  const dispatch = useDispatch();
-  const item = useSelector((state) => state.page);
-  const pageData = useSelector((state) => state.data);
-
-  let newData = [];
-    if (pageData.data) {
-      newData = pageData.data.reduce((accumulator, post) => {
-        post.key = `${post.id}`
-        return [...accumulator, post]
-        }, []);
-  }
-
+function Table () {
+  
   const newColumns = [
     {
       title: 'id',
@@ -40,10 +29,21 @@ function Table () {
     }
   ];
 
+  const dispatch = useDispatch();
+  const item = useSelector((state) => state.page);
+  const pageData = useSelector((state) => state.data);
+
+  let newData = [];
+    if (pageData.data) {
+      newData = pageData.data.reduce((accumulator, post) => {
+        post.key = `${post.id}`
+        return [...accumulator, post]
+        }, []);
+  }
+
   useEffect(() => {
     dispatch(initialPages(item.page));
   }, [item.page]);
-
 
   return (
     <>
@@ -52,10 +52,7 @@ function Table () {
         defaultPageSize: pageData.per_page,
         total: pageData.total,
         onChange: (page) => {
-          dispatch({
-            type: PAGE_NUMBER,
-            payload: page
-          })  
+          dispatch(pageNumber(page))  
         }
       }}
       />

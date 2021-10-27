@@ -6,7 +6,7 @@ import TextField from '@mui/material/TextField'
 import { Link as RouterLink, useHistory } from 'react-router-dom'
 import api from "../../utils/api";
 import { useDispatch } from 'react-redux';
-import { LOGGED_IN } from '../../redux/loggedIn/actions'
+import { loggedIn} from '../../redux/loggedIn/actions'
 
 function SignIn() {  
 
@@ -45,10 +45,7 @@ function SignIn() {
     return api.signin(data)
       .then((res) => {
         if(res.status === 200){
-          dispatch({
-            type: LOGGED_IN,
-            payload: true
-          });
+          dispatch(loggedIn(true));
           localStorage.setItem('jwt', res.token);
         }
         return res.status;
