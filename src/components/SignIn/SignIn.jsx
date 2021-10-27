@@ -4,30 +4,17 @@ import { Box } from '@mui/system';
 import { Button, Typography, Link, Alert} from '@mui/material';
 import TextField from '@mui/material/TextField'
 import { Link as RouterLink, useHistory } from 'react-router-dom'
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from "yup";
-
 import api from "../../utils/api";
-
 import { useDispatch } from 'react-redux';
 import { LOGGED_IN } from '../../redux/loggedIn/actions'
-
-
-
 
 function SignIn() {  
 
   const history = useHistory();
   const dispatch = useDispatch();
-
   
-  const regPass = /^([^0-9]*)$/
+  const regEmail =/^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$/
   const [loggin, setLoggin] = useState(false)
-
-  const schema = yup.object().shape({
-    email: yup.string().email('Введите корректный email').required('Обязательное поле'),
-    password: yup.string().min(6, 'Пароль должен содержать от 6 до 30 букв').max(30, 'Пароль должен содержать от 6 до 30 букв').matches(regPass, 'Пароль должен содержать от 6 до 30 букв').required('Обязательное поле')
-  })
 
   const { 
     register, 
@@ -36,8 +23,7 @@ function SignIn() {
       errors
     }
   } = useForm({
-    mode: 'onChange',
-    resolver: yupResolver(schema)
+    mode: 'onChange'
   });
 
   const onSubmit = data => {
@@ -48,10 +34,8 @@ function SignIn() {
       .then((res) => {
         if(res === 400) {
           setLoggin(true)
-          // console.log('ERROR')
         }
         if(res === 200) {
-          // console.log('LOGIN')
           history.push('/')
         }
       })
@@ -60,7 +44,6 @@ function SignIn() {
   function handleSignIn(data) {
     return api.signin(data)
       .then((res) => {
-        // console.log('resapp', res)
         if(res.status === 200){
           dispatch({
             type: LOGGED_IN,
@@ -110,15 +93,24 @@ function SignIn() {
           variant='outlined'
           sx={{mb: 1}}
           label='Email'
-          // ref={register}
-          {...register('email')} // {required: true, pattern: regEmail}
+          {...register('email',
+            {
+             required: {value: true, message: 'Обязательное поле'},
+             pattern: {value: regEmail, message: 'Введите корректный email'} 
+            })
+          }
           error={!!errors.email}
           helperText={errors?.email?.message}
         />
         <TextField          
           type="password" 
-          // ref={register}
-          {...register('password')} // {required: true, minLength:3, maxLength:30}
+          {...register('password',
+            {
+              required: {value: true, message: 'Обязательное поле'},              
+              minLength: {value: 5,  message: 'Пароль должен содержать от 5 до 10 символов'},
+              maxLength: {value: 10,  message: 'Пароль должен содержать от 5 до 10 символов'}
+            })
+          } 
           label='Password'
           variant='outlined'
           sx={{mb: 1}}

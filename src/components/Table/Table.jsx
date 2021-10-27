@@ -44,6 +44,7 @@ function Table () {
     dispatch(initialPages(item.page));
   }, [item.page]);
 
+
   return (
     <>
       <AntdTable dataSource={newData} columns={newColumns} pagination={{

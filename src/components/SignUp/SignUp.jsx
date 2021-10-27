@@ -5,25 +5,13 @@ import TextField from '@mui/material/TextField'
 import { Box } from '@mui/system';
 import { Typography, Link, Alert } from '@mui/material';
 import { Link as RouterLink, useHistory} from 'react-router-dom';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from "yup";
-
 import api from "../../utils/api";
 
 function SignUp() {
 
   const history = useHistory();
   const [loggin, setLoggin] = useState(false);
-
-  const schema = yup.object().shape({
-    email: yup.string()
-      .email('Введите корректный email')
-      .required('Обязательное поле'),
-    password: yup.string()
-      .min(6, 'Пароль должен содержать от 6 до 30 символов')
-      .max(30, 'Пароль должен содержать от 6 до 30 символов')
-      .required('Обязательное поле')
-  })
+  const regEmail =/^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$/
 
   const {
     register,
@@ -32,18 +20,15 @@ function SignUp() {
       errors
     }
   } = useForm({
-    mode: 'onChange',
-    resolver: yupResolver(schema)
+    mode: 'onChange'
   });
 
   function onSubmit(data) {
-    // console.log('onSubmit')
     handleSignUp({
       email: data.email,
       password: data.password,
     })
     .then((res) => {
-      // console.log('RESSTATUS', res)
       if(res === 400) {
         setLoggin(true)
       }
@@ -56,7 +41,6 @@ function SignUp() {
   function handleSignUp(data) {
     return api.signup(data)
       .then((res) => {
-        // console.log('RES1', res)
         return res.status;
       })
   }
@@ -100,7 +84,12 @@ function SignUp() {
           variant="outlined"   
           type="text" 
           className='signUp__input'
-          {...register('email')} //, {required: true, pattern: regEmail}
+          {...register('email',
+            {
+              required: {value: true, message: 'Обязательное поле'},
+              pattern: {value: regEmail, message: 'Введите корректный email'}
+            }
+          )}
           error={!!errors.email}
           helperText={errors?.email?.message}
         />
@@ -110,7 +99,13 @@ function SignUp() {
           variant="outlined"  
           type="password" 
           className='signUp__input'
-          {...register('password')} //, {required: true, minLength:3, maxLength:30}
+          {...register('password',
+            {
+              required: {value: true, message: 'Обязательное поле'},              
+              minLength: {value: 5,  message: 'Пароль должен содержать от 5 до 10 символов'},
+              maxLength: {value: 10,  message: 'Пароль должен содержать от 5 до 10 символов'}
+            }
+          )}
           error={!!errors.password}
           helperText={errors?.password?.message}
         />
