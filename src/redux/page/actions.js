@@ -1,5 +1,6 @@
 import api from '../../utils/api';
 
+export const IS_LOADING = 'IS_LOADING'
 export const PAGE_NUMBER = 'PAGE_NUMBER';
 export const INIT_DATA = 'INIT_DATA';
 
@@ -13,5 +14,16 @@ const initData = data => ({
   payload: data
 })
 
-export const initialPages = page => dispatch =>
-  api.getPages(page).then(res => dispatch(initData(res)))
+const isLoading = status => ({
+  type: IS_LOADING,
+  payload: status
+})
+
+export const fetchingPages = page => dispatch => {
+  dispatch(isLoading(true));
+  api.getPages(page)
+    .then(res => {
+      dispatch(isLoading(false))
+      dispatch(initData(res))
+    }).catch(() => (dispatch(isLoading(false))))
+}

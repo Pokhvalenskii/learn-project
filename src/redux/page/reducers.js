@@ -1,15 +1,27 @@
-import { PAGE_NUMBER, INIT_DATA } from './actions'
+import { PAGE_NUMBER, INIT_DATA, IS_LOADING } from './actions'
 
-const dafaultState = {
+const defaultState = {
   page: 1
 }
 
 const defaultData = {}
 
-export const page = (state = dafaultState, action) => {
+const isFetchingDefault = {
+  load: false
+}
+
+export const isFetching = (state = isFetchingDefault, action) => {
+  switch (action.type) {
+    case IS_LOADING:
+      return { ...state, load: action.payload }  
+    default: return state;
+  }
+}
+
+export const page = (state = defaultState, action) => {
   switch(action.type) {
     case PAGE_NUMBER:
-      return { ...state, page: action.payload}
+      return { ...state, page: action.payload }
     default: 
       return state;
   }

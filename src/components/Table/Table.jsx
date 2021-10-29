@@ -2,7 +2,8 @@ import { Table as AntdTable } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
 import { pageNumber } from '../../redux/page/actions';
 import { useEffect } from "react";
-import { initialPages } from '../../redux/page/actions';
+import { fetchingPages } from '../../redux/page/actions';
+import { Preloader } from '../Preloader/Preloader'
 
 function Table () {
   
@@ -42,20 +43,21 @@ function Table () {
   }
 
   useEffect(() => {
-    dispatch(initialPages(item.page));
+    dispatch(fetchingPages(item.page));
   }, [item.page]);
 
   return (
     <>
+      <Preloader />
       <AntdTable dataSource={newData} columns={newColumns} pagination={{
-        defaultCurrent: pageData.page,
-        defaultPageSize: pageData.per_page,
-        total: pageData.total,
-        onChange: (page) => {
-          dispatch(pageNumber(page))  
-        }
-      }}
-      />
+          defaultCurrent: pageData.page,
+          defaultPageSize: pageData.per_page,
+          total: pageData.total,
+          onChange: (page) => {
+            dispatch(pageNumber(page))  
+          }
+        }}
+        />      
     </>
   )
 }
